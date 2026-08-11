@@ -7,141 +7,102 @@ export default function DashboardStudent() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const getEvents = async () => {
+    const fetchEvents = async () => {
       try {
         const response = await api.get("/events");
 
-        console.log("Events:", response.data);
+        console.log("Response:", response.data);
 
         setEvents(response.data);
       } catch (error) {
-        console.error(error);
-        setError("Impossible de récupérer les événements.");
+        console.error("Error:", error);
+        setError("Impossible de charger les événements.");
       } finally {
         setLoading(false);
       }
     };
 
-    getEvents();
+    fetchEvents();
   }, []);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Chargement des événements...</p>
+        <p>Chargement...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 p-8">
 
-      {/* Navbar */}
-      <nav className="bg-white border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <h1 className="text-2xl font-bold text-blue-600">
-            BDE Events
-          </h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">
+        Les événements
+      </h1>
+
+      {error && (
+        <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-6">
+          {error}
         </div>
-      </nav>
+      )}
 
-      {/* Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-800">
-            Événements
-          </h2>
-
-          <p className="text-gray-500 mt-2">
-            Découvrez les prochains événements.
-          </p>
+      {events.length === 0 ? (
+        <div className="bg-white p-8 rounded-xl text-center">
+          Aucun événement disponible.
         </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {/* Error */}
-        {error && (
-          <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-6">
-            {error}
-          </div>
-        )}
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className="bg-white rounded-2xl shadow p-6"
+            >
 
-        {/* Events */}
-        {events.length === 0 ? (
-          <div className="bg-white rounded-xl p-8 text-center">
-            <p className="text-gray-500">
-              Aucun événement disponible.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-3">
+                {event.title}
+              </h2>
 
-            {events.map((event) => (
-              <div
-                key={event.id}
-                className="bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-lg transition"
-              >
+              <p className="text-gray-600 mb-4">
+                {event.description}
+              </p>
 
-                <div className="h-40 bg-blue-600 flex items-center justify-center">
-                  <span className="text-white text-5xl">
-                    🎉
-                  </span>
-                </div>
+              <div className="space-y-2 text-sm text-gray-600">
 
-                <div className="p-6">
+                <p>
+                  📅 {event.event_date}
+                </p>
 
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    {event.title}
-                  </h3>
+                <p>
+                  ⏰ {event.start_time} - {event.end_time}
+                </p>
 
-                  <p className="text-gray-500 text-sm mb-4">
-                    {event.description}
-                  </p>
+                <p>
+                  📍 {event.location}
+                </p>
 
-                  <div className="space-y-2 text-sm">
+                <p>
+                  💰 {event.price} DH
+                </p>
 
-                    <p>
-                      📅{" "}
-                      <span className="font-medium">
-                        {event.event_date}
-                      </span>
-                    </p>
+                <p>
+                  👥 {event.capacity} places
+                </p>
 
-                    <p>
-                      ⏰{" "}
-                      {event.start_time} - {event.end_time}
-                    </p>
-
-                    <p>
-                      📍{" "}
-                      {event.location}
-                    </p>
-
-                    <p>
-                      💰{" "}
-                      {event.price} DH
-                    </p>
-
-                    <p>
-                      👥{" "}
-                      Capacité : {event.capacity}
-                    </p>
-
-                  </div>
-
-                  <button
-                    className="w-full mt-5 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
-                  >
-                    Voir l'événement
-                  </button>
-
-                </div>
               </div>
-            ))}
 
-          </div>
-        )}
+              <button
+                className="w-full mt-5 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
+              >
+                Réserver
+              </button>
 
-      </main>
+            </div>
+          ))}
+
+        </div>
+      )}
+
     </div>
   );
 }
