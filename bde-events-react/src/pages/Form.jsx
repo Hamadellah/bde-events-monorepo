@@ -21,25 +21,38 @@ export default function Form() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const {id} = useParams();
-    
-    useEffect(() => {
-        if (id) {
-            // Fetch the event data for the given ID
-            const fetchEvent = async () => {
-                try {
-                    const response = await api.get(`/events/${id}`);
-                    setFormData(response.data);
-                    console.log( response.data);
-                } catch (error) {
-                    console.error("Error fetching event:", error);
-                }
-            };
+   
+const fetchEvents = async () => {
+    setLoading(true);
+    try {
+       const response = await api.get(`/events/${id}`);
+        setFormData(response.data.data);
+        console.log("API RESPONSE:", response.data.data);
+        const event=response.data.data;
+        setFormData({
+                title: event.title||"",
+                description:event.description||"",
+                event_date: event.event_date||"",
+                start_time: event.start_time||"",
+                end_time: event.end_time||"",
+                location: event.location||"",
+                price: event.price||"",
+                capacity: event.capacity||"",
+            });
+    } catch (error) {
+      console.error("ERROR:", error);
+      setError(
+        error.response?.data?.message ||
+        "Impossible de charger les événements."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            fetchEvent();
-            
-        }
-    }, [id]);
-
+  useEffect(() => {
+    fetchEvents();
+  }, [id]);
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -64,16 +77,7 @@ export default function Form() {
             );
 
             // vider le formulaire après création
-            setFormData({
-                title: "",
-                description: "",
-                event_date: "",
-                start_time: "",
-                end_time: "",
-                location: "",
-                price: "",
-                capacity: "",
-            });
+            
 
         } catch (error) {
             console.error("Error creating event:", error);
@@ -91,7 +95,24 @@ export default function Form() {
         }
         navigate("/dashboard/dashboardAdmin");
     };
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await api.put(`/events/${id}`, formData);
+            console.log("Event updated:", response.data);
+            alert(
+                response.data.message ||
+                "Événement mis à jour avec succès !"
+            );
 
+        }catch (error) {
+            console.error("Error updating event:", error);
+        } finally {
+            setLoading(false);
+        }
+        navigate("/dashboard/dashboardAdmin");
+    };
     // Loading هنا، خارج handleSubmit
     if (loading) {
         return (
@@ -100,6 +121,7 @@ export default function Form() {
             </div>
         );
     }
+
 
     return (
         <div className="min-h-screen bg-gray-100 p-8">

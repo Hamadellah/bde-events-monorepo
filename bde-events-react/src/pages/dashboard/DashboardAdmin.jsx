@@ -10,7 +10,7 @@ export default function DashboardAdmin() {
   const fetchEvents = async () => {
     try {
       const response = await api.get("/tableboard");
-      // console.log("API RESPONSE:", response.data);
+      console.log("API RESPONSE:", response.data);
       if (Array.isArray(response.data.data)) {
         setEvents(response.data.data);
       } else {
@@ -31,6 +31,8 @@ export default function DashboardAdmin() {
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
