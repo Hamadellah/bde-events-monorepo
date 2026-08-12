@@ -26,6 +26,7 @@ element: <Login />,
     path:"/register",
     element: <Register />,
 },
+
 {
     path: "/dashboard/dashboardAdmin",
     element:<ProtectedRoute role="admin">
@@ -43,7 +44,13 @@ element: <Login />,
     element: <ProtectedRoute role="admin">
       <Form />
     </ProtectedRoute>
-  }
+  },
+{
+    path :"/form/:id",
+    element: <ProtectedRoute role="admin">
+        <Form />
+    </ProtectedRoute>
+},
 
         ]
     }

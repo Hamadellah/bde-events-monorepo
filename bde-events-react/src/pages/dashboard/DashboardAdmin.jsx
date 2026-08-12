@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardAdmin() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
   const fetchEvents = async () => {
     try {
       const response = await api.get("/tableboard");
-      console.log("API RESPONSE:", response.data);
+      // console.log("API RESPONSE:", response.data);
       if (Array.isArray(response.data.data)) {
         setEvents(response.data.data);
       } else {
@@ -113,7 +115,7 @@ return (
           </div>
 
           <button
-            onClick={() => handleModify(event.id)}
+            onClick={() => navigate(`/form/${event.id}`)}
             className="w-full mt-5 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
           >
             Modifier
