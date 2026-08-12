@@ -29,6 +29,12 @@ export default function DashboardAdmin() {
   useEffect(() => {
     fetchEvents();
   }, []);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -37,70 +43,95 @@ export default function DashboardAdmin() {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-100 p-8">
+return (
+ <div className="min-h-screen bg-gray-100 p-8">
 
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">
-        Les événements
-      </h1>
+  {/* Header */}
+  <div className="flex items-center justify-between mb-8">
 
-      {error && (
-        <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-6">
-          {error}
-        </div>
-      )}
+    <h1 className="text-3xl font-bold text-gray-800">
+      Les événements
+    </h1>
 
-      {events.length === 0 ? (
-        <div className="bg-white p-8 rounded-xl text-center">
-          Aucun événement disponible.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="flex items-center gap-3">
 
-          {events.map((event) => (
-            <div
-              key={event.id}
-              className="bg-white rounded-2xl shadow p-6"
-            >
+      
+      <button
+        onClick={() => navigate("/form")}
+        className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-200 shadow"
+      >
+        + Créer un événement
+      </button>
 
-              <h2 className="text-xl font-bold text-gray-800 mb-3">
-                {event.title}
-              </h2>
-
-              <p className="text-gray-600 mb-4">
-                {event.description}
-              </p>
-
-              <div className="space-y-2 text-sm text-gray-600">
-
-                <p>
-                  les places restantes: {event.placerest}
-                </p>
-                <p>
-                  réservations: {event.reservation_count}
-                </p>
-
-              </div>
-
-              <button
-  onClick={() => handleModify(event.id)}
-  className="w-full mt-5 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
->
-  modifier
-</button>
-<button
-  onClick={() => handleDelete(event.id)}
-  className="w-full mt-5 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700"
->
-  supprimer
-</button>
-
-            </div>
-          ))}
-
-        </div>
-      )}
+      
+      <button
+        onClick={handleLogout}
+        className="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition duration-200 shadow"
+      >
+        Se déconnecter
+      </button>
 
     </div>
-  )
+
+  </div>
+
+  {error && (
+    <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-6">
+      {error}
+    </div>
+  )}
+
+  {events.length === 0 ? (
+    <div className="bg-white p-8 rounded-xl text-center">
+      Aucun événement disponible.
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      {events.map((event) => (
+        <div
+          key={event.id}
+          className="bg-white rounded-2xl shadow p-6"
+        >
+
+          <h2 className="text-xl font-bold text-gray-800 mb-3">
+            {event.title}
+          </h2>
+
+          <p className="text-gray-600 mb-4">
+            {event.description}
+          </p>
+
+          <div className="space-y-2 text-sm text-gray-600">
+            <p>
+              Les places restantes : {event.placerest}
+            </p>
+
+            <p>
+              Réservations : {event.reservation_count}
+            </p>
+          </div>
+
+          <button
+            onClick={() => handleModify(event.id)}
+            className="w-full mt-5 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+          >
+            Modifier
+          </button>
+
+          <button
+            onClick={() => handleDelete(event.id)}
+            className="w-full mt-3 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition"
+          >
+            Supprimer
+          </button>
+
+        </div>
+      ))}
+
+    </div>
+  )}
+
+</div>
+);
 }

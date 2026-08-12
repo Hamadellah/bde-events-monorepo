@@ -6,6 +6,7 @@ import Register from "@/pages/Register";
 import DashboardAdmin from "@/pages/dashboard/dashboardAdmin";
 import DashboardStudent from "@/pages/dashboard/dashboardStudent";
 import ProtectedRoute from "@/router/ProtectedRoute";
+import Form from "@/pages/Form";
 
 const router= createBrowserRouter([
     {
@@ -36,8 +37,13 @@ element: <Login />,
     element: <ProtectedRoute role="student">
       <DashboardStudent />
     </ProtectedRoute>,
-}
-
+},
+{
+    path: "/form",
+    element: <ProtectedRoute role="admin">
+      <Form />
+    </ProtectedRoute>
+  }
 
         ]
     }
