@@ -13,17 +13,14 @@ useEffect(() => {
 
       console.log("API RESPONSE:", response.data);
 
-      // حسب structure ديال Laravel
-      if (Array.isArray(response.data)) {
-        setEvents(response.data);
-      } else if (Array.isArray(response.data.events)) {
-        setEvents(response.data.events);
-      } else if (Array.isArray(response.data.data)) {
+     
+       if (Array.isArray(response.data.data)) {
         setEvents(response.data.data);
       } else {
         setEvents([]);
         console.error("Les événements ne sont pas un tableau:", response.data);
       }
+      console.log(response.data.data);
 
     } catch (error) {
       console.error("ERROR:", error);
@@ -38,6 +35,16 @@ useEffect(() => {
 
   fetchEvents();
 }, []);
+const handleReserve = async (eventId) => {
+  try {
+    const response = await api.post(`events/${eventId}/reserve`);
+    console.log('Réservation réussie:', response.data);
+    alert(response.data.message || 'Réservation réussie !');
+  }catch (error) {
+    console.error('Erreur lors de la réservation:', error);
+    alert(error.response.data.message || 'Erreur lors de la réservation.');
+  }
+}
 
   if (loading) {
     return (
@@ -106,10 +113,11 @@ useEffect(() => {
               </div>
 
               <button
-                className="w-full mt-5 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
-              >
-                Réserver
-              </button>
+  onClick={() => handleReserve(event.id)}
+  className="w-full mt-5 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
+>
+  Réserver
+</button>
 
             </div>
           ))}
