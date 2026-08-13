@@ -19,6 +19,9 @@ export default function ProtectedRoute({ children, role }) {
     if(user.role === "admin"){
       return <Navigate to="/form" replace />;
     }
+    if(user.role === "student"){
+      return <Navigate to="/tickets" replace />;
+    }
 
     return <Navigate to="/login" replace />;
   }

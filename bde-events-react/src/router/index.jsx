@@ -7,6 +7,7 @@ import DashboardAdmin from "@/pages/dashboard/dashboardAdmin";
 import DashboardStudent from "@/pages/dashboard/dashboardStudent";
 import ProtectedRoute from "@/router/ProtectedRoute";
 import Form from "@/pages/Form";
+import Tickets from "@/pages/Tickets";
 
 const router= createBrowserRouter([
     {

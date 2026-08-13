@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-
+import { useNavigate } from "react-router-dom";
 export default function DashboardStudent() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
 useEffect(() => {
   const fetchEvents = async () => {
@@ -66,7 +67,7 @@ const handleLogout = () => {
           Les événements
         </h1>
         <div className="flex items-center space-x-4">
-          <button onclick={navigate("/tickets")} className="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200">
+          <button  className="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200">
             Mes billets
           </button>
           <button className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onClick={handleLogout}>
