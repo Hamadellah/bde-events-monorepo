@@ -67,53 +67,45 @@ const fetchEvents = async () => {
         setLoading(true);
 
         try {
-            const response = await api.post("/events", formData);
-
-            console.log("Event created:", response.data);
+            if (id) {
+                const response = await api.put(`/events/${id}`, formData);
+                console.log("Event updated:", response.data);
+                alert(
+                    response.data.message ||
+                    "Événement mis à jour avec succès !"
+                );
+                navigate("/dashboard/dashboardAdmin");
+            } else {
+                const response = await api.post("/events", formData);
+                console.log("Event created:", response.data);
+                alert(
+                    response.data.message ||
+                    "Événement créé avec succès !"
+                );
+                navigate("/dashboard/dashboardAdmin");
+            }
 
             alert(
                 response.data.message ||
                 "Événement créé avec succès !"
             );
 
-            // vider le formulaire après création
+            
             
 
         } catch (error) {
             console.error("Error creating event:", error);
-
-            const message =
-                error.response?.data?.message ||
-                "Erreur lors de la création de l'événement.";
-
             setError(message);
             alert(message);
 
         } finally {
-            // مهم بزاف
+            
             setLoading(false);
         }
         navigate("/dashboard/dashboardAdmin");
     };
-    const handleUpdate = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const response = await api.put(`/events/${id}`, formData);
-            console.log("Event updated:", response.data);
-            alert(
-                response.data.message ||
-                "Événement mis à jour avec succès !"
-            );
 
-        }catch (error) {
-            console.error("Error updating event:", error);
-        } finally {
-            setLoading(false);
-        }
-        navigate("/dashboard/dashboardAdmin");
-    };
-    // Loading هنا، خارج handleSubmit
+    
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">

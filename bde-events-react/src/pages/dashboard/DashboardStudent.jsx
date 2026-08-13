@@ -45,21 +45,35 @@ const handleReserve = async (eventId) => {
     alert(error.response.data.message || 'Erreur lors de la réservation.');
   }
 }
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  window.location.href = "/login";
+}
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Chargement...</p>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">
-        Les événements
-      </h1>
+   <div className="min-h-screen bg-gray-100 p-8">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">
+          Les événements
+        </h1>
+        <div className="flex items-center space-x-4">
+          <button onclick={navigate("/tickets")} className="bg-white text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200">
+            Mes billets
+          </button>
+          <button className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+      </div>
 
       {error && (
         <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-6">

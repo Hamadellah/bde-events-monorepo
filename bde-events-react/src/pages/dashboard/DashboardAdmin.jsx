@@ -38,6 +38,21 @@ export default function DashboardAdmin() {
     localStorage.removeItem("user");
     window.location.href = "/login";
   }
+  const handleDelete = async (eventId) => {
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cet événement ?")) {
+      return;
+    }
+    try {
+      await api.delete(`/events/${eventId}`);
+      setEvents(events.filter((event) => event.id !== eventId));
+    } catch (error) {
+      console.error("ERROR:", error);
+      setError(
+        error.response?.data?.message ||
+        "Impossible de supprimer l'événement."
+      );
+    }
+  };
 
   if (loading) {
     return (
